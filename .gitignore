@@ -1,9 +1,8 @@
-# Project exclude paths
-/out/
-
-
 # IntelliJ
 .idea/
 *.iml
 # Maven
 target/
+
+# Project exclude paths
+/out/
