@@ -1,8 +1,10 @@
 package fr.lernejo.navy_battle.logic;
 
+import java.util.Arrays;
+
 public final class GameBoard implements Viewable {
-    public static final int ROW_NUMBER = 10;
-    public static final int COL_NUMBER = 10;
+    public final int ROW_NUMBER = 10;
+    public final int COL_NUMBER = 10;
     private final Player _player1;
     private final Player _player2;
 
@@ -16,31 +18,36 @@ public final class GameBoard implements Viewable {
     public String toString() {
         char[][] sea = new char[ROW_NUMBER][COL_NUMBER];
         for (int i = 0; i < sea.length; i++) {
-            for (int j = 0; j < sea[i].length; j++) {
-                sea[i][j] = ' ';
-            }
+            Arrays.fill(sea[i], ' ');
         }
         visualize(sea);
         String res = "";
-        for (int i = 0; i < COL_NUMBER; i++) {
-            res += " -----";
-        }
-        res += "\n";
+        res = getUpAndDown(res);
+        res = getMiddle(sea, res);
+        res = getUpAndDown(res);
+        return res;
+    }
+
+    private String getMiddle(char[][] sea, String res) {
+        StringBuilder resBuilder = new StringBuilder(res);
         for (int i = 0; i < ROW_NUMBER; i++) {
             for (int j = 0; j < COL_NUMBER; j++) {
-                res += "|  " + sea[i][j] + "  ";
+                resBuilder.append("|  ").append(sea[i][j]).append("  ");
             }
-            res += "|\n";
+            resBuilder.append("|\n");
         }
-        for (int i = 0; i < COL_NUMBER; i++) {
-            res += " -----";
-        }
+        res = resBuilder.toString();
+        return res;
+    }
+
+    private String getUpAndDown(String res) {
+        res = res + " -----".repeat(COL_NUMBER);
         res += "\n";
         return res;
     }
 
     @Override
-    public void visualize( char[][] sea ) {
+    public void visualize(char[][] sea) {
         _player1.visualize(sea);
         _player2.visualize(sea);
     }
@@ -55,5 +62,5 @@ public final class GameBoard implements Viewable {
 }
 
 interface Viewable {
-    void visualize( char[][] sea );
+    void visualize(char[][] sea);
 }

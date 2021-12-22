@@ -7,15 +7,12 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.Charset;
-
-import static java.net.http.HttpResponse.*;
 
 public class Launcher {
 
-    public static final int CLIENT_PORT = 8795;
+    public final int CLIENT_PORT = 8795;
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         if (args.length == 1) {
             LaunchServer(args[0]);
         } else {
@@ -27,29 +24,26 @@ public class Launcher {
         }
     }
 
-    private static final void LaunchClient( String port, String url ) {
+    private static final void LaunchClient(String port, String url) {
         HttpClient client = HttpClient.newHttpClient();
         JSONObject json = new JSONObject();
         json.put("id", "1");
         json.put("url", "http://localhost:" + port);
         json.put("message", "Hello I'm client");
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(url + "/api/game/start"))
-                .setHeader("Accept", "application/json")
-                .setHeader("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(json.toString(4)))
-                .build();
+            .uri(URI.create(url + "/api/game/start"))
+            .setHeader("Accept", "application/json")
+            .setHeader("Content-Type", "application/json")
+            .POST(HttpRequest.BodyPublishers.ofString(json.toString(4)))
+            .build();
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println(response.body());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    private static void LaunchServer( String portValue ) {
+    private static void LaunchServer(String portValue) {
         int port;
         try {
             port = Integer.parseInt(portValue);

@@ -12,15 +12,15 @@ import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
 public class Server {
-    public static final String PATH_PING = "/ping";
-    public static final String PATH_GAME_START = "/api/game/start";
-    public static final String PATH_GAME_FIRE = "/api/game/fire";
+    public final String PATH_PING = "/ping";
+    public final String PATH_GAME_START = "/api/game/start";
+    public final String PATH_GAME_FIRE = "/api/game/fire";
     private final HttpServer _server;
     private final PingHandler _pingHandler;
     private final GameStartHandler _gameStartHandler;
     private final GameFireHandler _gameFireHandler;
 
-    Server( int port ) throws IOException {
+    Server(int port) throws IOException {
         _server = HttpServer.create(new InetSocketAddress(port), 0);
         _server.setExecutor(Executors.newSingleThreadExecutor());
         _pingHandler = new PingHandler();
@@ -32,7 +32,7 @@ public class Server {
         _server.start();
     }
 
-    public static JSONObject ToJson( InputStream stream ) {
+    public static JSONObject ToJson(InputStream stream) {
         try {
             JSONObject jsonObject = new JSONObject(new String(stream.readAllBytes()));
             return jsonObject;
