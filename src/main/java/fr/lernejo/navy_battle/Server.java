@@ -32,7 +32,7 @@ public class Server {
         _server.start();
     }
 
-    public static JSONObject ToJson(InputStream stream) {
+/*    public static JSONObject ToJson(InputStream stream) {
         try {
             JSONObject jsonObject = new JSONObject(new String(stream.readAllBytes()));
             return jsonObject;
@@ -40,7 +40,7 @@ public class Server {
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
 
 }
 
