@@ -17,7 +17,7 @@ public final class GameFireHandler implements HttpHandler {
     private final GameBoard _board;
     private final IPlayer _player1;
     private final IPlayer _player2;
-    private final boolean _debug = false;
+
 
     public GameFireHandler(GameBoard board) {
         _board = board;
@@ -49,9 +49,6 @@ public final class GameFireHandler implements HttpHandler {
         json.put("consequence", res);
         json.put("shipLeft", _player2.hasShipLeft());
         json.put("Content-Type", "application/json");
-        if (_debug) {
-            json.put("Current Player", _player1.name());
-        }
         return json;
     }
 
