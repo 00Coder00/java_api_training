@@ -48,6 +48,7 @@ public final class GameFireHandler implements HttpHandler {
         JSONObject json = new JSONObject();
         json.put("consequence", res);
         json.put("shipLeft", _player2.hasShipLeft());
+        json.put("Content-Type", "application/json");
         if (_debug) {
             json.put("Current Player", _player1.name());
         }
