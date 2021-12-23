@@ -24,7 +24,7 @@ public class Server {
         _server = HttpServer.create(new InetSocketAddress(port), 0);
         _server.setExecutor(Executors.newSingleThreadExecutor());
         _pingHandler = new PingHandler();
-        _gameStartHandler = new GameStartHandler();
+        _gameStartHandler = new GameStartHandler(port);
         _gameFireHandler = new GameFireHandler(_gameStartHandler.getBoard());
         _server.createContext(PATH_PING, _pingHandler);
         _server.createContext(PATH_GAME_START, _gameStartHandler);

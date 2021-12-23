@@ -15,9 +15,14 @@ import java.util.List;
 public final class GameStartHandler implements HttpHandler {
     private final ArrayList<String> METHODS = new ArrayList<>(List.of("GET", "POST"));
     private final GameBoard _board = new GameBoard();
+    private final int _port;
 
     public GameBoard getBoard() {
         return _board;
+    }
+
+    public GameStartHandler(int port) {
+        _port = port;
     }
 
     @Override
@@ -37,14 +42,14 @@ public final class GameStartHandler implements HttpHandler {
     private JSONObject createJson() {
         JSONObject json = new JSONObject();
         json.put("id", "0c575465-21f6-43c9-8a2d-bc64c3ae6241");
-        json.put("url", "http://localhost:9876");
+        json.put("url", "http://localhost:"+_port);
         json.put("message", "May the best code win");
         return json;
     }
 
     private void createResponse(HttpExchange exchange, JSONObject json) throws IOException {
         String response = json.toString(4);
-        exchange.sendResponseHeaders(200, response.length());
+        exchange.sendResponseHeaders(202, response.length());
         OutputStream os = exchange.getResponseBody();
         os.write(response.getBytes(StandardCharsets.UTF_8));
         os.close();

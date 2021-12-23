@@ -11,7 +11,7 @@ public class PingHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        String out = "Hello";
+        String out = "OK";
 
         exchange.sendResponseHeaders(200, out.length());
 
