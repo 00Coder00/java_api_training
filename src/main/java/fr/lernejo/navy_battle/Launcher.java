@@ -33,7 +33,11 @@ public class Launcher {
             .setHeader("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(json.toString(4)))
             .build();
-        client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).join();
+        try {
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static JSONObject createJson(String port, String id, String message) {
