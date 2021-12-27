@@ -16,20 +16,14 @@ public class Launcher {
         } else {
             if (args.length == 2) {
                 LaunchServer(args[0]);
-                try {
-                    LaunchClient(args[0], args[1]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                LaunchClient(args[0], args[1]);
             } else {
                 System.out.println("Invalid number of parameters");
             }
         }
     }
 
-    public static final void LaunchClient(String port, String url) throws IOException, InterruptedException {
+    public static final void LaunchClient(String port, String url) {
         HttpClient client = HttpClient.newHttpClient();
         JSONObject json = createJson(port, "1", "Hello I'm client");
         HttpRequest request = HttpRequest.newBuilder()
@@ -38,11 +32,14 @@ public class Launcher {
             .setHeader("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(json.toString(4)))
             .build();
-        client.send(request, HttpResponse.BodyHandlers.ofString());
-
+        try {
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    public static JSONObject createJson(String port, String id, String message) {
+    private static JSONObject createJson(String port, String id, String message) {
         JSONObject json = new JSONObject();
         json.put("id", id);
         json.put("url", "http://localhost:" + port);
@@ -56,11 +53,12 @@ public class Launcher {
             port = Integer.parseInt(portValue);
             try {
                 Server server = new Server(port);
+                System.out.println("Server Ready");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (NumberFormatException e) {
-
+            System.out.println("Error invalid port : " + portValue);
         }
     }
 }
