@@ -10,22 +10,26 @@ import java.net.http.HttpResponse;
 
 public class Launcher {
 
-    public final int CLIENT_PORT = 8795;
-
     public static void main(String[] args) {
         if (args.length == 1) {
             LaunchServer(args[0]);
         } else {
             if (args.length == 2) {
                 LaunchServer(args[0]);
-                LaunchClient(args[0], args[1]);
+                try {
+                    LaunchClient(args[0], args[1]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             } else {
                 System.out.println("Invalid number of parameters");
             }
         }
     }
 
-    private static final void LaunchClient(String port, String url) {
+    public static final void LaunchClient(String port, String url) throws IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         JSONObject json = createJson(port, "1", "Hello I'm client");
         HttpRequest request = HttpRequest.newBuilder()
@@ -34,14 +38,11 @@ public class Launcher {
             .setHeader("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(json.toString(4)))
             .build();
-        try {
-            client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+
     }
 
-    private static JSONObject createJson(String port, String id, String message) {
+    public static JSONObject createJson(String port, String id, String message) {
         JSONObject json = new JSONObject();
         json.put("id", id);
         json.put("url", "http://localhost:" + port);
@@ -49,18 +50,17 @@ public class Launcher {
         return json;
     }
 
-    private static void LaunchServer(String portValue) {
+    public static void LaunchServer(String portValue) {
         int port;
         try {
             port = Integer.parseInt(portValue);
             try {
                 Server server = new Server(port);
-                System.out.println("Server Ready");
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } catch (NumberFormatException e) {
-            System.out.println("Error invalid port : " + portValue);
+
         }
     }
 }
